@@ -18,6 +18,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Added Effect for Mobile Viewport Meta Tag
+  useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = "viewport";
+    meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+    document.getElementsByTagName('head')[0].appendChild(meta);
+  }, []);
+
   // User Profile State
   const [profile, setProfile] = useState({
     name: '',
@@ -111,15 +119,15 @@ function App() {
   };
 
   return (
-    <main data-theme={theme} className="fit-screen relative w-full h-screen overflow-hidden">
+    <main data-theme={theme} className="fit-screen relative w-full h-screen overflow-x-hidden overflow-y-auto lg:overflow-hidden">
       <div className="absolute inset-0 z-0 bg-cover bg-center transition-opacity duration-700" 
            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&q=80&w=2000')`, opacity: theme === 'dark' ? 0.3 : 0.1 }} />
       <div className="noise-overlay" />
       
       {showLogin && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-xl">
-          <div className="glass-panel p-10 w-full max-w-md text-center">
-            <h2 className="text-4xl font-serif mb-2 italic">{isRegistering ? "Join Us" : "Sacred Space"}</h2>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-xl p-4">
+          <div className="glass-panel p-6 md:p-10 w-full max-w-md text-center">
+            <h2 className="text-3xl md:text-4xl font-serif mb-2 italic">{isRegistering ? "Join Us" : "Sacred Space"}</h2>
             <p className="text-[10px] tracking-widest uppercase opacity-60 mb-8">{isRegistering ? "Create your sanctuary account" : "Welcome back to your sanctuary"}</p>
             
             <div className="space-y-4 mb-6">
@@ -130,7 +138,7 @@ function App() {
                 <button onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] uppercase tracking-widest opacity-50 hover:opacity-100 transition-opacity">{showPassword ? "Hide" : "Show"}</button>
               </div>
             </div>
-            <button onClick={() => {setUser(true); setShowLogin(false);}} className="w-full py-4 bg-[#A3B18A] text-[#121212] rounded-xl font-bold uppercase tracking-widest">
+            <button onClick={() => {setUser(true); setShowLogin(false);}} className="w-full py-4 bg-[#A3B18A] text-[#121212] rounded-xl font-bold uppercase tracking-widest text-xs">
               {isRegistering ? "Create Account" : "Enter Space"}
             </button>
             <p className="mt-6 text-xs opacity-50 cursor-pointer underline" onClick={() => {setIsRegistering(!isRegistering); setShowPassword(false);}}>
@@ -141,108 +149,108 @@ function App() {
       )}
 
       {!showLogin && (
-        <div className="flex-1 flex flex-col p-8 md:p-12 relative z-10 h-full">
+        <div className="flex-1 flex flex-col p-4 md:p-12 relative z-10 h-full">
           <nav className="flex justify-between items-center mb-6">
-            <div className="flex gap-6">
-              <button onClick={() => setView('dashboard')} className={`text-[10px] tracking-[.3em] uppercase ${view === 'dashboard' ? 'text-[#A3B18A]' : 'opacity-40'}`}>Dashboard</button>
-              <button onClick={() => setView('settings')} className={`text-[10px] tracking-[.3em] uppercase ${view === 'settings' ? 'text-[#A3B18A]' : 'opacity-40'}`}>Profile Settings</button>
+            <div className="flex gap-4 md:gap-6">
+              <button onClick={() => setView('dashboard')} className={`text-[8px] md:text-[10px] tracking-[.2em] md:tracking-[.3em] uppercase ${view === 'dashboard' ? 'text-[#A3B18A]' : 'opacity-40'}`}>Dashboard</button>
+              <button onClick={() => setView('settings')} className={`text-[8px] md:text-[10px] tracking-[.2em] md:tracking-[.3em] uppercase ${view === 'settings' ? 'text-[#A3B18A]' : 'opacity-40'}`}>Profile</button>
             </div>
-            <div className="flex items-center gap-6">
-              <button onClick={toggleTheme} className="text-xl">{theme === 'dark' ? '☀️' : '🌙'}</button>
-              <button onClick={() => {setShowLogin(true); setUser(null);}} className="text-[10px] tracking-[.3em] uppercase text-red-400">Logout</button>
+            <div className="flex items-center gap-4 md:gap-6">
+              <button onClick={toggleTheme} className="text-lg">{theme === 'dark' ? '☀️' : '🌙'}</button>
+              <button onClick={() => {setShowLogin(true); setUser(null);}} className="text-[8px] md:text-[10px] tracking-[.2em] md:tracking-[.3em] uppercase text-red-400">Logout</button>
             </div>
           </nav>
 
           {view === 'dashboard' ? (
-            <div className="flex flex-col h-full overflow-hidden">
-              <header className="text-center mb-4">
-                <h1 className="text-5xl md:text-6xl font-serif italic mb-2">A Quiet Place for Your Heart.</h1>
-                <p className="text-[#A3B18A] tracking-[0.5em] uppercase text-xs">Shared burdens. Timeless truth.</p>
+            <div className="flex flex-col h-full">
+              <header className="text-center mb-6 md:mb-4">
+                <h1 className="text-3xl md:text-6xl font-serif italic mb-2 px-2">A Quiet Place for Your Heart.</h1>
+                <p className="text-[#A3B18A] tracking-[0.3em] md:tracking-[0.5em] uppercase text-[8px] md:text-xs px-2">Shared burdens. Timeless truth.</p>
               </header>
 
-              <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 overflow-hidden">
-                <section className="lg:col-span-7 glass-panel p-8 flex flex-col h-full overflow-hidden">
-                  <form onSubmit={handleSubmitPrayer} className="h-full flex flex-col justify-between overflow-hidden">
-                    <div className="grid grid-cols-2 gap-4">
+              <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 overflow-y-auto lg:overflow-hidden pb-10 lg:pb-0">
+                <section className="lg:col-span-7 glass-panel p-6 md:p-8 flex flex-col">
+                  <form onSubmit={handleSubmitPrayer} className="flex flex-col gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1">
                         <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Full Name</label>
-                        <input type="text" value={prayerForm.name} onChange={(e) => setPrayerForm({...prayerForm, name: e.target.value})} className="p-3 rounded-xl outline-none" required />
+                        <input type="text" value={prayerForm.name} onChange={(e) => setPrayerForm({...prayerForm, name: e.target.value})} className="p-3 rounded-xl outline-none text-sm" required />
                       </div>
                       <div className="flex flex-col gap-1">
                         <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Contact</label>
-                        <input type="text" value={prayerForm.contact} onChange={(e) => setPrayerForm({...prayerForm, contact: e.target.value})} className="p-3 rounded-xl outline-none" required />
+                        <input type="text" value={prayerForm.contact} onChange={(e) => setPrayerForm({...prayerForm, contact: e.target.value})} className="p-3 rounded-xl outline-none text-sm" required />
                       </div>
                     </div>
                     <div className="flex flex-col gap-1">
                       <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Home Address</label>
-                      <input type="text" value={prayerForm.address} onChange={(e) => setPrayerForm({...prayerForm, address: e.target.value})} className="w-full p-3 rounded-xl outline-none" required />
+                      <input type="text" value={prayerForm.address} onChange={(e) => setPrayerForm({...prayerForm, address: e.target.value})} className="w-full p-3 rounded-xl outline-none text-sm" required />
                     </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="flex flex-col gap-1">
                         <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Modality</label>
-                        <select value={prayerForm.modality} onChange={(e) => setPrayerForm({...prayerForm, modality: e.target.value})} className="bg-transparent border border-white/10 p-3 rounded-xl outline-none">
+                        <select value={prayerForm.modality} onChange={(e) => setPrayerForm({...prayerForm, modality: e.target.value})} className="bg-[#1a1a1a] md:bg-transparent border border-white/10 p-3 rounded-xl outline-none text-sm">
                           <option value="Online Prayer">Online Prayer</option>
                           <option value="Face-to-Face">Face-to-Face</option>
                         </select>
                       </div>
                       <div className="flex flex-col gap-1">
                         <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Verse Request</label>
-                        <input type="text" value={prayerForm.verse_request} onChange={(e) => setPrayerForm({...prayerForm, verse_request: e.target.value})} className="p-3 rounded-xl outline-none italic" placeholder="e.g. Proverbs 3:5" />
+                        <input type="text" value={prayerForm.verse_request} onChange={(e) => setPrayerForm({...prayerForm, verse_request: e.target.value})} className="p-3 rounded-xl outline-none italic text-sm" placeholder="e.g. Proverbs 3:5" />
                       </div>
                     </div>
-                    <div className="flex flex-col gap-1 min-h-[100px] flex-grow">
+                    <div className="flex flex-col gap-1">
                       <label className="text-[9px] uppercase tracking-widest opacity-40 ml-1">Prayer Intent</label>
-                      <textarea value={prayerForm.intent} onChange={(e) => setPrayerForm({...prayerForm, intent: e.target.value})} className="w-full h-full p-4 rounded-2xl outline-none resize-none" placeholder="Speak your heart..." required />
+                      <textarea value={prayerForm.intent} onChange={(e) => setPrayerForm({...prayerForm, intent: e.target.value})} className="w-full h-32 md:h-40 p-4 rounded-2xl outline-none resize-none text-sm" placeholder="Speak your heart..." required />
                     </div>
-                    <button type="submit" disabled={loading} className="w-full py-5 bg-[#F2E9E4] text-[#121212] font-bold rounded-2xl uppercase tracking-[0.4em] text-[10px] mt-4">
+                    <button type="submit" disabled={loading} className="w-full py-4 bg-[#F2E9E4] text-[#121212] font-bold rounded-2xl uppercase tracking-[0.3em] text-[9px] mt-2">
                       {loading ? 'Processing...' : 'Request Prayer'}
                     </button>
                   </form>
                 </section>
 
-                <section className="lg:col-span-5 flex flex-col gap-6 overflow-hidden h-full">
-                  <div className="glass-panel p-8 flex-1 flex flex-col items-center justify-between overflow-hidden h-full">
+                <section className="lg:col-span-5 flex flex-col gap-6 h-auto lg:h-full">
+                  <div className="glass-panel p-6 md:p-8 flex flex-col items-center justify-between gap-6">
                     <div className="w-full flex gap-2">
-                      <input type="text" placeholder="Search Verse..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && searchVerse()} className="flex-1 p-3 rounded-xl outline-none italic" />
+                      <input type="text" placeholder="Search Verse..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && searchVerse()} className="flex-1 p-3 rounded-xl outline-none italic text-sm" />
                       <button onClick={searchVerse} className="bg-white/10 px-4 rounded-xl">🔍</button>
                     </div>
 
-                    <div className="w-full space-y-2">
-                       <p className="text-[9px] uppercase tracking-widest opacity-40">Customize Card Background</p>
-                       <div className="flex flex-wrap gap-2">
+                    <div className="w-full space-y-2 text-center md:text-left">
+                       <p className="text-[9px] uppercase tracking-widest opacity-40">Customize Card</p>
+                       <div className="flex flex-wrap justify-center md:justify-start gap-2">
                           {cardPresets.map((preset) => (
-                            <button key={preset.name} onClick={() => setCardBg(preset.value)} className={`w-7 h-7 rounded-full border-2 ${cardBg === preset.value ? 'border-white' : 'border-white/20'}`} style={{ background: preset.value.startsWith('http') ? `url(${preset.value}) center/cover` : preset.value }} />
+                            <button key={preset.name} onClick={() => setCardBg(preset.value)} className={`w-8 h-8 rounded-full border-2 ${cardBg === preset.value ? 'border-white' : 'border-white/20'}`} style={{ background: preset.value.startsWith('http') ? `url(${preset.value}) center/cover` : preset.value }} />
                           ))}
                        </div>
                     </div>
                     
-                    <div ref={cardRef} className="relative w-full aspect-square max-h-[260px] rounded-2xl overflow-hidden flex items-center justify-center p-8 shadow-2xl">
+                    <div ref={cardRef} className="relative w-full aspect-square max-w-[240px] md:max-h-[260px] rounded-2xl overflow-hidden flex items-center justify-center p-6 shadow-2xl">
                        <div className="absolute inset-0 z-0" style={{ background: cardBg.startsWith('http') ? `url(${cardBg}) center/cover` : cardBg }} />
                        <div className="absolute inset-0 bg-black/50 z-[1]" />
                        <div className="relative z-[2] text-center">
-                          <p className="font-serif italic text-lg leading-relaxed text-white">"{verseData.text}"</p>
-                          <p className="mt-4 text-[9px] uppercase tracking-[0.3em] text-[#A3B18A] font-bold">{verseData.reference}</p>
+                          <p className="font-serif italic text-base md:text-lg leading-relaxed text-white">"{verseData.text}"</p>
+                          <p className="mt-4 text-[8px] uppercase tracking-[0.2em] text-[#A3B18A] font-bold">{verseData.reference}</p>
                        </div>
                     </div>
                     
-                    <button onClick={downloadCard} className="w-full text-[10px] font-bold uppercase tracking-widest border border-white/20 py-4 rounded-full hover:bg-white/10 transition-all">Download Card</button>
+                    <button onClick={downloadCard} className="w-full text-[9px] font-bold uppercase tracking-widest border border-white/20 py-4 rounded-full hover:bg-white/10 transition-all">Download Card</button>
                   </div>
                 </section>
               </div>
             </div>
           ) : (
-            <div className="flex-1 flex items-center justify-center overflow-hidden h-full">
-              <div className="glass-panel p-12 w-full max-w-xl text-center">
-                <h2 className="text-3xl font-serif italic mb-8">Personal Information</h2>
+            <div className="flex-1 flex items-center justify-center p-4">
+              <div className="glass-panel p-8 md:p-12 w-full max-w-xl text-center">
+                <h2 className="text-2xl md:text-3xl font-serif italic mb-8">Personal Information</h2>
                 <div className="space-y-6 text-left">
                   {['name', 'email', 'contact', 'address'].map(key => (
                     <div key={key}>
                       <label className="text-[9px] uppercase tracking-[0.4em] opacity-40">{key}</label>
-                      {isEditing ? <input className="w-full bg-white/5 border-b border-white/20 p-2 outline-none" value={profile[key]} onChange={(e) => setProfile({...profile, [key]: e.target.value})} /> : <p className="text-xl font-serif border-b border-transparent p-2">{profile[key] || 'Not provided'}</p>}
+                      {isEditing ? <input className="w-full bg-white/5 border-b border-white/20 p-2 outline-none text-sm" value={profile[key]} onChange={(e) => setProfile({...profile, [key]: e.target.value})} /> : <p className="text-lg md:text-xl font-serif border-b border-transparent p-2">{profile[key] || 'Not provided'}</p>}
                     </div>
                   ))}
                 </div>
-                <button onClick={() => setIsEditing(!isEditing)} className="mt-10 px-10 py-3 bg-[#A3B18A] text-[#121212] rounded-full uppercase text-[10px] tracking-widest font-bold">
+                <button onClick={() => setIsEditing(!isEditing)} className="mt-10 px-10 py-3 bg-[#A3B18A] text-[#121212] rounded-full uppercase text-[9px] tracking-widest font-bold">
                   {isEditing ? "Save Changes" : "Edit Information"}
                 </button>
               </div>
